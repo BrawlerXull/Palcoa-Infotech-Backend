@@ -56,6 +56,15 @@ app.post('/auth', async (req, res) => {
   }
 });
 
+app.get('/form', async (req, res) => {
+    try {
+      const randomToken = await generateRandomString(32);
+      res.status(200).json({ message: 'Signed in successfully', public_key:randomToken, success: true });
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to generate token', success: false });
+    }
+});
+
 
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
