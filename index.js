@@ -1,3 +1,5 @@
+
+const { JSEncrypt } = require('js-encrypt')
 const express = require('express');
 const crypto = require('crypto');
 const cors = require('cors');
@@ -160,26 +162,30 @@ function decryptProduct(encryptedFields, privateKey) {
   const decryptedFields = {};
 
   try {
+    const decrypt = new JSEncrypt();
+    decrypt.setPrivateKey(privateKey);
+
     for (const [key, encryptedValue] of Object.entries(encryptedFields)) {
-      if (key === 'failed' || key === 'id' || key == 'productName' || key == 'description') continue;
-      console.log(`Decrypting ${key}: ${encryptedValue}`);
-      const buffer = Buffer.from(encryptedValue, 'base64');
-      const decrypted = crypto.privateDecrypt(
-        {
-          key: privateKey,
-          padding: crypto.constants.RSA_NO_PADDING,
-        },
-        buffer
-      );
-      decryptedFields[key] = decrypted.toString('utf-8');
+      if (key === 'failed' || key === 'id' || key === 'productName' || key === 'description') continue;
+
+      console.log(`Decrypting ${key}:`, encryptedValue);
+      const decrypted = decrypt.decrypt(encryptedValue.toString('base64'));
+
+      if (decrypted) {
+        decryptedFields[key] = decrypted;
+        console.log(`${key} decrypted value:`, decrypted);
+      } else {
+        console.error(`${key} decryption failed`);
+      }
     }
   } catch (err) {
-    console.log("Error while decrypting product:", err);
-    throw err;  // Re-throw the error after logging it
+    console.error("Error while decrypting product:", err);
+    throw err;
   }
 
   return decryptedFields;
 }
+
 
 async function getPrivateKeyFromPublicKey(publicKey) {
   const keyDocument = await Key.findOne({ publicKey: publicKey });

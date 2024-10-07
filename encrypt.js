@@ -13,7 +13,7 @@ U139G0VekgIJl+/3XS3ZBF0RrR+aRfOmQ2TG+kaAkxJN26Brht0Hm/VYHkFp2kp/
 -----END PUBLIC KEY-----`;
 
 // Encrypt some data
-const data = 'dbfjdbfljadsbnfljdsbfljndslkfnsdakfnsdlkfnewkfnl;wkfnlekrnflerfn';
+const data = '12';
 const buffer = Buffer.from(data, 'utf8');
 const encrypted = crypto.publicEncrypt(
   {
