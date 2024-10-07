@@ -1,5 +1,4 @@
-
-const { JSEncrypt } = require('js-encrypt')
+const { JSEncrypt } = require('js-encrypt');
 const express = require('express');
 const crypto = require('crypto');
 const cors = require('cors');
@@ -107,19 +106,15 @@ app.post('/send', async (req, res) => {
   try {
     for (const product of data) {
       let { public_key, ...encryptedFields } = product;
-      console.log(public_key)
+      console.log(public_key);
 
       const privateKey = await getPrivateKeyFromPublicKey(public_key);
       if (!privateKey) {
-
-        console.log("hess")
         return res.status(400).json({ message: 'Private key not found for the provided public key', success: false });
       }
-      
-      console.log("hess")
 
       console.log("Encrypted fields:", encryptedFields);
-      
+
       try {
         const decryptedProduct = decryptProduct(encryptedFields, privateKey);
         console.log("Decrypted product:", decryptedProduct);
@@ -135,6 +130,8 @@ app.post('/send', async (req, res) => {
         });
 
         await decryptedProductDoc.save();
+
+        await Key.updateOne({ publicKey: public_key }, { $set: { isVerified: true } });
       } catch (err) {
         console.log("Error while decrypting product:", err);
         return res.status(500).json({ message: 'Error while decrypting product', success: false, error: err.message });
@@ -186,10 +183,9 @@ function decryptProduct(encryptedFields, privateKey) {
   return decryptedFields;
 }
 
-
 async function getPrivateKeyFromPublicKey(publicKey) {
   const keyDocument = await Key.findOne({ publicKey: publicKey });
-  console.log("Key Document : " , keyDocument);
+  console.log("Key Document:", keyDocument);
   return keyDocument ? keyDocument.privateKey : null;
 }
 
