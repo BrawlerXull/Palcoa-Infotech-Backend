@@ -1,0 +1,46 @@
+const crypto = require('crypto');
+const fs = require('fs');
+
+// Read the private key
+const privateKey = `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDar6ugIJPQBw31
+6vHwX7atOBeosQaVeDfCB9OnoftFh7hpBqUUfhe7rgX823La9yVcZDKgARyyPAnc
+dLrgju7gBac6dm4GvsvhSHOkD7dDgjfYtKgdqFf3i2fdkfQ3RcNUPmBH1j5njYRQ
+gcU6ibZuV6g6o+kEcvIcgl5FGp8reuTJh0OyyMmxT7vL9l+HFXM8W2W/zg37iyyx
+BEheYFRVhTPS38nBGfxpaRNFLoFMeS0tG28KPp4e5Ki9bNEI2wQ9dYyoH1pNekEK
+GyR4pf9TXf0bRV6SAgmX7/ddLdkEXRGtH5pF86ZDZMb6RoCTEk3boGuG3Qeb9Vge
+QWnaSn/vAgMBAAECggEAQzULzLlWU+9nFfWvhw0TSibb9ob5HASHNkVLgdAhNdwh
+C330S9j4mEBCLNSQdsTPoZZVjKDq3cffy/W/3PVwaj6yhyAQblhCtiibCYee7cte
+OGZE6GBtMHGSaSDK6hWxkvlcg5dPNGnkiQ1ovLXH8B9WXzcyjKB60dIrAJfO5QBd
+NjwbIkJNEFGDF+biC6I34ZYMCX6Pbu4WR45jBsUQOXlvtPW9SwPrv2yz9q0LTrKI
+VcvrQK6VuAcHLYYBAMddDNN17xV/rMK+zCSNUQV7nmcy4+t5XcOhDAgx0CCAXI2G
+jcDyZy/+/UVBxpza9buXYQlrNrmCWgOl2PdL6x+HkQKBgQD2E/EPhZBoqm0sz1Q+
+0lYHiPTr+qt/R7NS+rNdtIKT/ret1dqANt0oizFiaEY3L67xzP6Dfvuhhy+Icjwc
+E5G9PRGW59A0SMgz7juFDXQ3u7qLU1jhwHC/58Zr8v97hHvwb/AeU32UQ7X0wSEm
+D8FSfMqDY7lzeyXy5zGGvoxYpwKBgQDjgPyyG0fEZs2Rhg7xLOIMy3ZESmIVu0Jp
+ZR0Wx4F2FABWVQJPUEnIUpaRqrOEI4DKdwBLsMJnPNtbPMy+40IcYZSRS0dy9rix
+D8gQhW5mbD9b7ibp4irYMErsjmOXE7CjalBQKHmthQzGm4qvrYVCIkkslLW4w/x0
+mX1P97C/eQKBgCAN/vPPqT0JHkmdBFNeoNhAbe8jax2cYG6pu520OuI+ZvzdA6Z5
+/xsd7qPsA2GC854J3wmQDAVBj96NSuk5X12wS89FiSiWZoXlPZmaZA4yhR1LESPv
+JoDJF17Oe5tCacarPjMlGxGqNFSap8/Gc59kJBkzb1/spcfbd+cegTe3AoGATQ+p
+CM9yzNUhtrRZJVpVq43Tnqgvdzr58OdeJhQoBw4ZWyTqZmFEzMUk2Wyf6Bd6jZon
+kHvsLboQd2Qt2k7yWti20UxVhFyMDPXSh74aujjacVJG/hws9RPOnThSBZ+WypO9
+Zpl/NcaGoFOZc45sQA2LCb3JnC9OuVQwfUDiLskCgYEAnJj80mtViHnhlJFra+Li
+U1xrgNxdgEFMT8ORQj/LaXBdOOgK51bfP8B9CEdo4lhvg2OURZQef586NZ7BWcDk
+6rwpSlBuDJkNeYzSWMXBtMsCC+hQJSAL8ilWLavZC1drTqerreaJo7iFf6pwBVPN
+2lXbY5SX8eJfEpOZ9D0MLqo=
+-----END PRIVATE KEY-----`;
+
+// Decrypt the data
+const encryptedData = `oHRUlU3Y1Kw3yqBHaAtFw4k7Khl1Rrdm1a3U2zVH4IjGBMlFSdkmPtyGCjhrgb4VsVhHuo/QNve2UHByl7joWaCOxYbSTZcMhXnhimjWuSB2NMsbrMl4sX0ATAhNiseRVloMw7oJ3W68mCa61v3wncd+v1gQO6GBkxHcVcDPPiksGQw584o6DNWYsqsmJQoaEQ+u4y7F54+OVOxlIT46umJk1bGatbQLTtXHf5rrwB2OrHNJ74//EKWMIS0HaHuURWqQaG0DNW1E9e2DMXpLewKjkskpWw7YW/a+DP0EbA0jmOQ5p/4DXl0FfRWJ7nq4ulvlwS8T/tjblQeBbx1MTg==`;
+const encryptedBuffer = Buffer.from(encryptedData, 'base64');
+const decrypted = crypto.privateDecrypt(
+  {
+    key: privateKey,
+    padding: crypto.constants.RSA_PKCS1_PADDING,
+  },
+  encryptedBuffer
+);
+
+const decryptedData = decrypted.toString('utf8');
+console.log('Decrypted data:', decryptedData);
