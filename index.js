@@ -17,9 +17,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-mongoose.connect('mongodb://localhost:27017/key')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// mongoose.connect('mongodb://localhost:27017/key')
+//   .then(() => console.log('Connected to MongoDB'))
+//   .catch(err => console.error('MongoDB connection error:', err));
+
+mongoose
+  .connect(
+    "mongodb+srv://chinmay:chinmay@tasks.rqbaptf.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => console.log("Connected to db"));
 
 const keySchema = new mongoose.Schema({
   publicKey: { type: String, required: true },
