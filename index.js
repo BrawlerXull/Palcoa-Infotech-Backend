@@ -62,7 +62,7 @@ function generateRandomString(length) {
 }
 
 app.get('/', (req, res) => {
-  res.json({ message: 'hello' });
+  res.json({ message: 'hello world' });
 });
 
 app.post('/auth', async (req, res) => {
